@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+<title>cubicfox-attendance</title>
+</head>
+<body>
+    <form class="container" action="/image">
+        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2">
+            <div class="col">
+                <label for="name">name</label>
+                <input type="text" name="name" class="form-control" required {{#formRequest.name}}value="{{formRequest.name}}"{{/formRequest.name}}/>
+            </div>
+            <div class="col">
+                <label for="yearMonth">yearMonth</label>
+                <input type="month" name="yearMonth" class="form-control" min="2018-03" required {{#formRequest.yearMonth}}value="{{ formRequest.yearMonth }}"{{/formRequest.yearMonth}} />
+            </div>
+            <div class="col">
+                <label for="include">Include in case of Saturday is a working day</label>
+                <input type="text" name="include" class="form-control" pattern="^([1-2]?[0-9])(,[1-2]?[0-9])*$" placeholder="1,22" value="{{#formRequest.include}}{{.}}{{^-last}},{{/-last}}{{/formRequest.include}}" />
+            </div>
+            <div class="col">
+                <label for="FS">FS - fizetett szabadsag</label>
+                <input type="text" name="fs" class="form-control" pattern="^([1-2]?[0-9])(,[1-2]?[0-9])*$" placeholder="1,22" value="{{#formRequest.fs}}{{.}}{{^-last}},{{/-last}}{{/formRequest.fs}}" />
+            </div>
+            <div class="col">
+                <label for="BS">BS - Sick leave (beteg szabi)</label>
+                <input type="text" name="bs" class="form-control" pattern="^([1-2]?[0-9])(,[1-2]?[0-9])*$" placeholder="1,22" value="{{#formRequest.bs}}{{.}}{{^-last}},{{/-last}}{{/formRequest.bs}}" />
+            </div>
+            <div class="col">
+                <label for="LO">LO - LeaveOut</label>
+                <input type="text" name="lo" class="form-control" pattern="^([1-2]?[0-9])(,[1-2]?[0-9])*$" placeholder="1,22" value="{{#formRequest.lo}}{{.}}{{^-last}},{{/-last}}{{/formRequest.lo}}"/>
+            </div>
+        </div>
+
+        <div class="row row-cols-1">
+            <div class="col">
+                <input type="submit" value="submit" class="form-control" />
+            </div>
+        </div>
+    </form>
+</body>
+</html>
