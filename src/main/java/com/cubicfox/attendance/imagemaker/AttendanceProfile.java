@@ -1,6 +1,5 @@
 package com.cubicfox.attendance.imagemaker;
 
-import com.google.common.collect.Iterables;
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.YearMonth;
