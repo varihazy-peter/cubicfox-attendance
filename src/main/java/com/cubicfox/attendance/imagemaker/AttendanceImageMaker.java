@@ -1,25 +1,28 @@
 package com.cubicfox.attendance.imagemaker;
 
-import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-import com.google.common.collect.Iterators;
-import com.google.common.io.CountingOutputStream;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
+
+import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
+import com.google.common.collect.Iterators;
+import com.google.common.io.CountingOutputStream;
+
+import org.springframework.stereotype.Component;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
