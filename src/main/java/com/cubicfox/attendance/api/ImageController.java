@@ -34,8 +34,8 @@ public class ImageController {
     AttendanceProfile attendanceProfile;
     AttendanceImageMaker imageMaker;
 
-    @GetMapping(value = "/rest/image", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.IMAGE_JPEG_VALUE)
-    ResponseEntity<StreamingResponseBody> image(@Valid @RequestBody ImageRequest imageRequest) throws IOException {
+    @GetMapping(value = "/rest/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    ResponseEntity<StreamingResponseBody> image(@Valid ImageRequest imageRequest) throws IOException {
         List<Placement<?>> placements = attendanceProfile.createPlacements(imageRequest.attendanceRequest());
         StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
