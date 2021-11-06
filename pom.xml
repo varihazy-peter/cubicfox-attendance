@@ -52,6 +52,12 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-indexer</artifactId>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
 
   <build>
@@ -82,6 +88,19 @@
           <pom>
             <sortPom></sortPom>
           </pom>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.1.4</version>
+        <configuration>
+          <to>
+            <image>europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance</image>
+          </to>
+          <from>
+            <image>openjdk:17-jdk</image>
+          </from>
         </configuration>
       </plugin>
     </plugins>

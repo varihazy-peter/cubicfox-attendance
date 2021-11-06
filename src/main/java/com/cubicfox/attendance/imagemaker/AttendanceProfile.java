@@ -1,6 +1,8 @@
 package com.cubicfox.attendance.imagemaker;
 
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
@@ -19,16 +21,25 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 @Component
 public class AttendanceProfile {
 
     String st = "09:00";
     String et = "17:30";
     String h = "8";
-    Font fontT = new Font("Monospaced", Font.PLAIN, 60);
-    Font fontH = new Font("Monospaced", Font.PLAIN, 140);
-    Font fontDOW = new Font("Monospaced", Font.PLAIN, 32);
+    Font defaultFont;
+    {
+        try {
+            java.io.InputStream inputStream = AttendanceProfile.class.getResourceAsStream("/Inconsolata-Regular.ttf");
+            defaultFont = Font.createFont(Font.PLAIN, inputStream);
+        } catch (FontFormatException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    Font fontN = defaultFont.deriveFont(82f);
+    Font fontT = defaultFont.deriveFont(72f);
+    Font fontH = defaultFont.deriveFont(180f);
+    Font fontDOW = defaultFont.deriveFont(40f);
 
     @Value
     public static class Placement<T> {
@@ -57,8 +68,8 @@ public class AttendanceProfile {
 
     private List<Placement<?>> placeHead(String name, YearMonth ym) {
         String month = ym.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, new Locale("hu", "HU"));
-        return List.of(placeText(name, pointName, fontT), placeText(ym.getYear(), pointYear, fontT),
-                placeText(month, pointMonth, fontT));
+        return List.of(placeText(name, pointName, fontN), placeText(ym.getYear(), pointYear, fontN),
+                placeText(month, pointMonth, fontN));
     }
 
     private PlaceHolder placeHolder(LocalDate date, final Map<Integer, PlaceHolder> placeHolders) {
@@ -70,7 +81,6 @@ public class AttendanceProfile {
     }
 
     private List<Placement<String>> placeDate(LocalDate date, PlaceHolder placeHolder) {
-        log.info("placeDate {}, {}", date, placeHolder);
         int day = date.getDayOfMonth();
         return switch (placeHolder) {
         case LO -> List.of(placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
@@ -105,7 +115,7 @@ public class AttendanceProfile {
     @RequiredArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     private static enum Offset {
-        Time1(0, 0), Time2(0, 67), TimeH(440, 67), FS(390, 67), DOW(-390, 67);
+        Time1(0, 0), Time2(0, 67), TimeH(440, 67), FS(390, 67), DOW(-386, 67);
 
         int x, y;
     }

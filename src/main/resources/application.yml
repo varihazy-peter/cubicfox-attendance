@@ -1,4 +1,5 @@
 server:
+  shutdown: graceful
   error:
       whitelabel.enabled: false
       include-message: always
