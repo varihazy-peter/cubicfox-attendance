@@ -3,7 +3,6 @@ package com.cubicfox.attendance.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.cubicfox.attendance.api.ImageController.ImageRequest;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;

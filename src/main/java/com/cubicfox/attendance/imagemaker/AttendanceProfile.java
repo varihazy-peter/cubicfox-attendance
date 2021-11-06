@@ -90,7 +90,7 @@ public class AttendanceProfile {
     }
 
     private <T> Placement<T> placeText(T object, int x, int y, Font font) {
-        return new Placement<T>(object, x, y, font);
+        return new Placement<>(object, x, y, font);
     }
 
     private Point calculateCord(int day, Offset offset) {
