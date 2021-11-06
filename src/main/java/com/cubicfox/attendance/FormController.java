@@ -113,9 +113,7 @@ public class FormController {
             if (object == null) {
                 return;
             }
-            if (object instanceof String s) {
-                map.put(key, s);
-            } else if (object instanceof Collection<?> c) {
+            if (object instanceof Collection<?> c) {
                 if (!c.isEmpty()) {
                     map.put(key, convert(c));
                 }

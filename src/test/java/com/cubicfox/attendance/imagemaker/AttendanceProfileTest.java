@@ -19,10 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 
 @Slf4j
-@SpringBootTest(classes = AttendanceProfile.class)
+@SpringBootTest(classes = AttendanceProfile.class, webEnvironment = WebEnvironment.NONE)
 class AttendanceProfileTest {
 
     @Autowired
