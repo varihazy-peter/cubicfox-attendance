@@ -46,9 +46,8 @@ class ImageControllerTest {
         MvcResult mvcResult = mockMvc.perform( //
                 request(HttpMethod.GET, "/rest/image").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON, MediaType.IMAGE_JPEG).content(requestBody)) //
-                .andDo(MockMvcResultHandlers.print()) //
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.IMAGE_JPEG)).andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk()) //
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.IMAGE_JPEG)) //
                 .andReturn();
         byte[] content = mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.IMAGE_JPEG)).andReturn()
