@@ -44,21 +44,23 @@ public class AttendanceProfile {
         return Stream.concat(head, days).collect(Collectors.toUnmodifiableList());
     }
 
+    private final Point pointName = new Point(480, 680);
+    private final Point pointYear = new Point(1250, 680);
+    private final Point pointMonth = new Point(1510, 680);
+
     private List<Placement<?>> placeHead(String name, YearMonth ym) {
         String month = ym.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, new Locale("hu", "HU"));
-        return List.of(placeText(name, 480, 680, fontT), placeText(ym.getYear(), 1250, 680, fontT),
-                placeText(month, 1510, 680, fontT));
+        return List.of(placeText(name, pointName, fontT), placeText(ym.getYear(), pointYear, fontT),
+                placeText(month, pointMonth, fontT));
     }
 
     private List<Placement<String>> placeDay(int day, PlaceHolder ph) {
-        if (ph == null) {
-            return List.of(placeText(st, calculateCord(day, Offset.Time1), fontT),
-                    placeText(et, calculateCord(day, Offset.Time2), fontT),
-                    placeText(h, calculateCord(day, Offset.TimeH), fontH));
-        } else {
-            return List.of( //
-                    placeText(ph.getText(), calculateCord(day, Offset.FS), fontH));
-        }
+        return (ph == null)
+                ? List.of(placeText(st, calculateCord(day, Offset.Time1), fontT),
+                        placeText(et, calculateCord(day, Offset.Time2), fontT),
+                        placeText(h, calculateCord(day, Offset.TimeH), fontH))
+                : List.of( //
+                        placeText(ph.getText(), calculateCord(day, Offset.FS), fontH));
     }
 
     private <T> Placement<T> placeText(T object, Point point, Font font) {
