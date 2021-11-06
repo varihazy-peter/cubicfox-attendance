@@ -12,9 +12,6 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
-import com.cubicfox.attendance.imagemaker.AttendanceProfile;
-import com.google.common.collect.ImmutableMap;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +23,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.cubicfox.attendance.imagemaker.AttendanceProfile;
+import com.google.common.collect.ImmutableMap;
 
 @WebMvcTest(controllers = FormController.class)
 @ComponentScan(basePackageClasses = AttendanceProfile.class)

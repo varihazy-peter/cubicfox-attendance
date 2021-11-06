@@ -13,18 +13,16 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 
+import org.springframework.stereotype.Component;
+
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CountingOutputStream;
 
-import org.springframework.stereotype.Component;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Component

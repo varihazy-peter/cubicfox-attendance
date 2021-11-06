@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
+
+import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 
 import lombok.extern.slf4j.Slf4j;
 
