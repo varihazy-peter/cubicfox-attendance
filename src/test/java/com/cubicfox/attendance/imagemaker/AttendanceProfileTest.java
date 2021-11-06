@@ -31,8 +31,8 @@ class AttendanceProfileTest {
 
     @Test
     void test() {
-        AttendanceRequestDTO dto = AttendanceRequestDTO.from("name", YearMonth.of(2021, 1), List.of(1),
-                Map.of(PlaceHolder.FS, List.of(4)));
+        AttendanceRequestDTO dto = AttendanceRequestDTO.from("name", YearMonth.of(2021, 1), List.of(),
+                Map.of(PlaceHolder.LO, List.of(1), PlaceHolder.H8, List.of(3), PlaceHolder.FS, List.of(4)));
         List<Placement<?>> placements = attendanceProfile.createPlacements(dto);
         Set<String> texts = placements.stream().map(Placement::getObject).map(String::valueOf)
                 .collect(Collectors.toUnmodifiableSet());

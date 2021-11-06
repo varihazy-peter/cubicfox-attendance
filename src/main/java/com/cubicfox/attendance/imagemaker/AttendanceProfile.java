@@ -1,20 +1,24 @@
 package com.cubicfox.attendance.imagemaker;
 
+import com.google.common.collect.Iterables;
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Predicate;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Component
@@ -25,21 +29,25 @@ public class AttendanceProfile {
     String h = "8";
     Font fontT = new Font("Monospaced", Font.PLAIN, 60);
     Font fontH = new Font("Monospaced", Font.PLAIN, 140);
+    Font fontDOW = new Font("Monospaced", Font.PLAIN, 32);
 
     @Value
     public static class Placement<T> {
+        @NonNull
         T object;
         int x, y;
+        @NonNull
         java.awt.Font font;
+
+        public String text() {
+            return String.valueOf(this.object);
+        }
     }
 
     public List<Placement<?>> createPlacements(AttendanceRequestDTO requestDTO) {
-        Predicate<LocalDate> leaveOutFilter = d -> requestDTO.getPlaceHolders().containsKey(d.getDayOfMonth())
-                || (d.getDayOfWeek().getValue() < 6);
         Stream<Placement<?>> days = requestDTO.getYearMonth().atDay(1)
-                .datesUntil(requestDTO.getYearMonth().plusMonths(1).atDay(1)).filter(leaveOutFilter)
-                .map(LocalDate::getDayOfMonth)
-                .flatMap(day -> placeDay(day, requestDTO.getPlaceHolders().get(day)).stream());
+                .datesUntil(requestDTO.getYearMonth().plusMonths(1).atDay(1)) //
+                .flatMap(d -> placeDate(d, placeHolder(d, requestDTO.getPlaceHolders())).stream());
         Stream<Placement<?>> head = placeHead(requestDTO.getName(), requestDTO.getYearMonth()).stream();
         return Stream.concat(head, days).collect(Collectors.toUnmodifiableList());
     }
@@ -54,13 +62,28 @@ public class AttendanceProfile {
                 placeText(month, pointMonth, fontT));
     }
 
-    private List<Placement<String>> placeDay(int day, PlaceHolder ph) {
-        return (ph == null)
-                ? List.of(placeText(st, calculateCord(day, Offset.Time1), fontT),
-                        placeText(et, calculateCord(day, Offset.Time2), fontT),
-                        placeText(h, calculateCord(day, Offset.TimeH), fontH))
-                : List.of( //
-                        placeText(ph.getText(), calculateCord(day, Offset.FS), fontH));
+    private PlaceHolder placeHolder(LocalDate date, final Map<Integer, PlaceHolder> placeHolders) {
+        PlaceHolder placeHolder = placeHolders == null ? null : placeHolders.get(date.getDayOfMonth());
+        if (placeHolder != null) {
+            return placeHolder;
+        }
+        return date.getDayOfWeek().getValue() < 6 ? PlaceHolder.H8 : PlaceHolder.LO;
+    }
+
+    private List<Placement<String>> placeDate(LocalDate date, PlaceHolder placeHolder) {
+        log.info("placeDate {}, {}", date, placeHolder);
+        int day = date.getDayOfMonth();
+        return switch (placeHolder) {
+        case LO -> List.of(placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+        case FS, BS -> List.of( //
+                placeText(placeHolder.getText(), calculateCord(day, Offset.FS), fontH),
+                placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+        case H8 -> List.of( //
+                placeText(st, calculateCord(day, Offset.Time1), fontT),
+                placeText(et, calculateCord(day, Offset.Time2), fontT),
+                placeText(h, calculateCord(day, Offset.TimeH), fontH),
+                placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+        };
     }
 
     private <T> Placement<T> placeText(T object, Point point, Font font) {
@@ -83,7 +106,7 @@ public class AttendanceProfile {
     @RequiredArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     private static enum Offset {
-        Time1(0, 0), Time2(0, 67), TimeH(440, 67), FS(390, 67);
+        Time1(0, 0), Time2(0, 67), TimeH(440, 67), FS(390, 67), DOW(-390, 67);
 
         int x, y;
     }

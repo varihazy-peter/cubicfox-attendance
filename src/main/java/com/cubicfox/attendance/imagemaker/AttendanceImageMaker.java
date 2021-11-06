@@ -56,7 +56,7 @@ public class AttendanceImageMaker {
     private void placeText(Graphics graphics, Placement<?> placement) {
         Font oldFont = graphics.getFont();
         graphics.setFont(placement.getFont());
-        graphics.drawString(String.valueOf(placement.getObject()), placement.getX(), placement.getY());
+        graphics.drawString(placement.text(), placement.getX(), placement.getY());
         graphics.setFont(oldFont);
     }
 
