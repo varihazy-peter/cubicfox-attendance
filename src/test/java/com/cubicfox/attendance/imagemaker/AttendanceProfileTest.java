@@ -2,6 +2,7 @@ package com.cubicfox.attendance.imagemaker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,16 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
-
-import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest(classes = AttendanceProfile.class, webEnvironment = WebEnvironment.NONE)

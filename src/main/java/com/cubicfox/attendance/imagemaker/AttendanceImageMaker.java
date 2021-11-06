@@ -1,5 +1,8 @@
 package com.cubicfox.attendance.imagemaker;
 
+import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
+import com.google.common.collect.Iterators;
+import com.google.common.io.CountingOutputStream;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,19 +12,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
-
-import org.springframework.stereotype.Component;
-
-import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-import com.google.common.collect.Iterators;
-import com.google.common.io.CountingOutputStream;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Component;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor

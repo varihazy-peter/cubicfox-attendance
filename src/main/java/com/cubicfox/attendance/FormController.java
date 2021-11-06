@@ -1,5 +1,10 @@
 package com.cubicfox.attendance;
 
+import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
+import com.cubicfox.attendance.imagemaker.AttendanceProfile;
+import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
+import com.cubicfox.attendance.imagemaker.AttendanceRequestDTO;
+import com.cubicfox.attendance.imagemaker.PlaceHolder;
 import java.io.IOException;
 import java.net.URI;
 import java.time.YearMonth;
@@ -9,13 +14,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,18 +35,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
-import com.cubicfox.attendance.imagemaker.AttendanceProfile;
-import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-import com.cubicfox.attendance.imagemaker.AttendanceRequestDTO;
-import com.cubicfox.attendance.imagemaker.PlaceHolder;
-
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
