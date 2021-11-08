@@ -1,4 +1,4 @@
 steps:
   - name: gcr.io/cloud-builders/mvn
-    args: ["spotless:check", "install", "jib:build"]
+    args: ["spotless:check", "install", "jib:build", "-Dimage=eu.gcr.io/cubicfox-attendance/cubicfox-attendance"]
 images: ["europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance"]
