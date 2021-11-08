@@ -1,5 +1,4 @@
 steps:
-  - name: maven:3.8.3-openjdk-17
-    entrypoint: mvn
+  - name: gcr.io/cloud-builders/mvn
     args: ["spotless:check", "install", "jib:build"]
 images: ["europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance"]
