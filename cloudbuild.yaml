@@ -1,5 +1,5 @@
 steps:
   - name: gcr.io/cloud-builders/mvn
-    args: ["spotless:check", "install", "jib:build"]
+    args: ["spotless:check", "install", "jib:build", "-Djib.to.tags=$COMMIT_SHA"]
 images:
-- europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance
+- europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance:$COMMIT_SHA
