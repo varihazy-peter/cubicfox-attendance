@@ -82,17 +82,23 @@ public class AttendanceProfile {
 
     private List<Placement<String>> placeDate(LocalDate date, PlaceHolder placeHolder) {
         int day = date.getDayOfMonth();
-        return switch (placeHolder) {
-        case LO -> List.of(placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
-        case FS, BS -> List.of( //
-                placeText(placeHolder.getText(), calculateCord(day, Offset.FS), fontH),
-                placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
-        case H8 -> List.of( //
-                placeText(st, calculateCord(day, Offset.Time1), fontT),
-                placeText(et, calculateCord(day, Offset.Time2), fontT),
-                placeText(h, calculateCord(day, Offset.TimeH), fontH),
-                placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
-        };
+        switch (placeHolder) {
+        case LO:
+            return List.of(placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+        case FS:
+        case BS:
+            return List.of( //
+                    placeText(placeHolder.getText(), calculateCord(day, Offset.FS), fontH),
+                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+        case H8:
+            return List.of( //
+                    placeText(st, calculateCord(day, Offset.Time1), fontT),
+                    placeText(et, calculateCord(day, Offset.Time2), fontT),
+                    placeText(h, calculateCord(day, Offset.TimeH), fontH),
+                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+        default:
+            throw new IllegalStateException("not handled placeHolder " + placeHolder);
+        }
     }
 
     private <T> Placement<T> placeText(T object, Point point, Font font) {
