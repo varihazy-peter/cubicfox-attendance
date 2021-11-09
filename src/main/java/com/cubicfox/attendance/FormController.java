@@ -62,8 +62,8 @@ public class FormController {
             headers.setLocation(URI.create(uri));
             return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).headers(headers).build();
         }
-        List<Placement<?>> placements = attendanceProfile.createPlacements(AttendanceRequestDTO.from(formRequest.name,
-                formRequest.yearMonth, formRequest.include, formRequest.placeHolders()));
+        List<Placement<?>> placements = attendanceProfile.createPlacements(
+                AttendanceRequestDTO.from(formRequest.name, formRequest.yearMonth, formRequest.placeHolders()));
         StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
     }
@@ -85,20 +85,25 @@ public class FormController {
         @NotNull
         YearMonth yearMonth;
 
-        List<@Valid @Min(1) @Max(31) Integer> include;
+        List<@Valid @Min(1) @Max(31) Integer> h8;
         List<@Valid @Min(1) @Max(31) Integer> fs;
         List<@Valid @Min(1) @Max(31) Integer> bs;
         List<@Valid @Min(1) @Max(31) Integer> lo;
 
         Map<PlaceHolder, ? extends Collection<Integer>> placeHolders() {
-            return Map.of(PlaceHolder.FS, fs, PlaceHolder.BS, bs, PlaceHolder.LO, lo);
+            return Map.of( //
+                    PlaceHolder.FS, fs == null ? List.of() : fs, //
+                    PlaceHolder.H8, h8 == null ? List.of() : h8, //
+                    PlaceHolder.BS, bs == null ? List.of() : bs, //
+                    PlaceHolder.LO, lo == null ? List.of() : lo //
+            );
         }
 
         Map<String, String> params() {
             var map = new HashMap<String, String>();
             addIf(map, "name", name);
             addIf(map, "yearMonth", yearMonth);
-            addIf(map, "include", include);
+            addIf(map, "h8", h8);
             addIf(map, "fs", fs);
             addIf(map, "bs", bs);
             addIf(map, "lo", lo);
@@ -120,6 +125,10 @@ public class FormController {
 
         private String convert(Collection<?> c) {
             return c.stream().filter(Objects::nonNull).map(String::valueOf).collect(Collectors.joining(","));
+        }
+
+        public AttendanceRequestDTO attendanceRequest() {
+            return AttendanceRequestDTO.from(getName(), getYearMonth(), placeHolders());
         }
     }
 }

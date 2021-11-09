@@ -11,18 +11,13 @@ import lombok.Value;
 
 @Value
 public class AttendanceRequestDTO {
-    public static final String QP_YEAR_MONTH = "yearMonth";
-    public static final String QP_NAME = "name";
-    public static final String QP_INCLUDE = "include";
-
     String name;
     YearMonth yearMonth;
-    Set<Integer> include;
     Map<Integer, PlaceHolder> placeHolders;
 
     @Builder(builderMethodName = "builderFrom")
     public static AttendanceRequestDTO from(@NonNull String name, @NonNull YearMonth yearMonth,
-            Collection<Integer> include, @NonNull Map<PlaceHolder, ? extends Collection<Integer>> placeHolders) {
+            @NonNull Map<PlaceHolder, ? extends Collection<Integer>> placeHolders) {
         Map<Integer, Set<PlaceHolder>> map = placeHolders.entrySet().stream()
                 .flatMap(e -> e.getValue().stream().map(v -> Map.entry(v, e.getKey()))).collect(Collectors.groupingBy(
                         Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toUnmodifiableSet())));
@@ -31,7 +26,7 @@ public class AttendanceRequestDTO {
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("Conflicting Placeholders " + errors);
         }
-        return new AttendanceRequestDTO(name, yearMonth, Set.copyOf(include), map.entrySet().stream()
+        return new AttendanceRequestDTO(name, yearMonth, map.entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, e -> e.getValue().iterator().next())));
     }
 

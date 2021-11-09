@@ -5,6 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
+import com.cubicfox.attendance.imagemaker.PlaceHolder;
+import java.net.URI;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @WebMvcTest(controllers = ImageController.class)
 @ComponentScan(basePackageClasses = AttendanceProfile.class)
@@ -34,7 +38,7 @@ class ImageControllerTest {
     @Test
     void test_ok() throws Exception {
         MvcResult mvcResult = mockMvc //
-                .perform(request(HttpMethod.GET, "/rest/image?name=name&yearMonth=2021-11")
+                .perform(request(HttpMethod.GET, "/rest/image?name=name&yearMonth=2021-11&lo=1,2,3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON, MediaType.IMAGE_JPEG)) //
                 .andExpect(MockMvcResultMatchers.status().isOk()) //

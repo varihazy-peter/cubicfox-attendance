@@ -23,8 +23,8 @@
                 <input type="month" name="yearMonth" class="form-control" min="2018-03" required {{#formRequest.yearMonth}}value="{{ formRequest.yearMonth }}"{{/formRequest.yearMonth}} />
             </div>
             <div class="col">
-                <label for="include">Include in case of Saturday is a working day</label>
-                <input type="text" name="include" class="form-control" pattern="^([1-2]?[0-9])(,[1-2]?[0-9])*$" placeholder="1,22" value="{{#formRequest.include}}{{.}}{{^-last}},{{/-last}}{{/formRequest.include}}" />
+                <label for="h8">8 Hours in case of Saturday is a working day</label>
+                <input type="text" name="h8" class="form-control" pattern="^([1-2]?[0-9])(,[1-2]?[0-9])*$" placeholder="1,22" value="{{#formRequest.h8}}{{.}}{{^-last}},{{/-last}}{{/formRequest.h8}}" />
             </div>
             <div class="col">
                 <label for="FS">FS - fizetett szabadsag</label>
