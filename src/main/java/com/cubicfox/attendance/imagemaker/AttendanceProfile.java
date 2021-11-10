@@ -1,8 +1,6 @@
 package com.cubicfox.attendance.imagemaker;
 
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
@@ -16,30 +14,17 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 @Component
 public class AttendanceProfile {
 
     String st = "09:00";
     String et = "17:30";
     String h = "8";
-    Font defaultFont;
-    {
-        try {
-            java.io.InputStream inputStream = AttendanceProfile.class.getResourceAsStream("/Inconsolata-Regular.ttf");
-            defaultFont = Font.createFont(Font.PLAIN, inputStream);
-        } catch (FontFormatException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    Font fontN = defaultFont.deriveFont(82f);
-    Font fontT = defaultFont.deriveFont(72f);
-    Font fontH = defaultFont.deriveFont(180f);
-    Font fontDOW = defaultFont.deriveFont(40f);
+    FontStorege fontStorege;
 
     @Value
     public static class Placement<T> {
@@ -68,8 +53,11 @@ public class AttendanceProfile {
 
     private List<Placement<?>> placeHead(String name, YearMonth ym) {
         String month = ym.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, new Locale("hu", "HU"));
-        return List.of(placeText(name, pointName, fontN), placeText(ym.getYear(), pointYear, fontN),
-                placeText(month, pointMonth, fontN));
+        return List.of( //
+                placeText(name, pointName, fontStorege.getFontN()), //
+                placeText(ym.getYear(), pointYear, fontStorege.getFontN()), //
+                placeText(month, pointMonth, fontStorege.getFontN()) //
+        );
     }
 
     private PlaceHolder placeHolder(LocalDate date, final Map<Integer, PlaceHolder> placeHolders) {
@@ -84,18 +72,19 @@ public class AttendanceProfile {
         int day = date.getDayOfMonth();
         switch (placeHolder) {
         case LO:
-            return List.of(placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+            return List.of( //
+                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()));
         case FS:
         case BS:
             return List.of( //
-                    placeText(placeHolder.getText(), calculateCord(day, Offset.FS), fontH),
-                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+                    placeText(placeHolder.getText(), calculateCord(day, Offset.FS), fontStorege.getFontH()),
+                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()));
         case H8:
             return List.of( //
-                    placeText(st, calculateCord(day, Offset.Time1), fontT),
-                    placeText(et, calculateCord(day, Offset.Time2), fontT),
-                    placeText(h, calculateCord(day, Offset.TimeH), fontH),
-                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontDOW));
+                    placeText(st, calculateCord(day, Offset.Time1), fontStorege.getFontT()),
+                    placeText(et, calculateCord(day, Offset.Time2), fontStorege.getFontT()),
+                    placeText(h, calculateCord(day, Offset.TimeH), fontStorege.getFontH()),
+                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()));
         default:
             throw new IllegalStateException("not handled placeHolder " + placeHolder);
         }

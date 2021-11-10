@@ -23,7 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 
 @Slf4j
-@SpringBootTest(classes = AttendanceProfile.class, webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(classes = { AttendanceProfile.class, FontStoregeFactory.class }, webEnvironment = WebEnvironment.NONE)
 class AttendanceProfileTest {
 
     @Autowired
