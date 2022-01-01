@@ -2,6 +2,8 @@ package com.cubicfox.attendance.imagemaker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cubicfox.attendance.domain.DayModifier;
+import com.cubicfox.attendance.domain.MonthlyAttendance;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.time.Instant;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -28,15 +30,18 @@ class AttendanceProfileTest {
 
     @Autowired
     AttendanceProfile attendanceProfile;
+    Map<Integer, DayModifier> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS);
 
     @Test
     void test() {
-        AttendanceRequestDTO dto = AttendanceRequestDTO.from("name", YearMonth.of(2021, 1),
-                Map.of(PlaceHolder.LO, List.of(1), PlaceHolder.H8, List.of(3), PlaceHolder.FS, List.of(4)));
+        var dto = new MonthlyAttendance("name", YearMonth.of(2021, 1), days);
         List<Placement<?>> placements = attendanceProfile.createPlacements(dto);
-        Set<String> texts = placements.stream().map(Placement::getObject).map(String::valueOf)
-                .collect(Collectors.toUnmodifiableSet());
-        assertThat(texts).contains("name", "2021", "január", "FS", "8");
+        Map<String, Long> texts = placements.stream().map(Placement::getObject).map(String::valueOf)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        log.info("{}", texts);
+        assertThat(texts).containsAllEntriesOf(
+                Map.of("január", 1l, "8", 1l, "name", 1l, "2021", 1l, "17:30", 1l, "FS", 1l, "09:00", 1l));
+
         this.write(placements);
     }
 

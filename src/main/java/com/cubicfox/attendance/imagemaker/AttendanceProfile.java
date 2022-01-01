@@ -1,12 +1,13 @@
 package com.cubicfox.attendance.imagemaker;
 
+import com.cubicfox.attendance.domain.DayModifier;
+import com.cubicfox.attendance.domain.MonthlyAttendance;
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
@@ -39,10 +40,9 @@ public class AttendanceProfile {
         }
     }
 
-    public List<Placement<?>> createPlacements(AttendanceRequestDTO requestDTO) {
-        Stream<Placement<?>> days = requestDTO.getYearMonth().atDay(1)
-                .datesUntil(requestDTO.getYearMonth().plusMonths(1).atDay(1)) //
-                .flatMap(d -> placeDate(d, placeHolder(d, requestDTO.getPlaceHolders())).stream());
+    public List<Placement<?>> createPlacements(MonthlyAttendance requestDTO) {
+        Stream<Placement<?>> days = requestDTO.getDays().entrySet().stream()
+                .flatMap(e -> this.placeDate(requestDTO.getYearMonth().atDay(e.getKey()), e.getValue()).stream());
         Stream<Placement<?>> head = placeHead(requestDTO.getName(), requestDTO.getYearMonth()).stream();
         return Stream.concat(head, days).collect(Collectors.toUnmodifiableList());
     }
@@ -60,15 +60,7 @@ public class AttendanceProfile {
         );
     }
 
-    private PlaceHolder placeHolder(LocalDate date, final Map<Integer, PlaceHolder> placeHolders) {
-        PlaceHolder placeHolder = placeHolders == null ? null : placeHolders.get(date.getDayOfMonth());
-        if (placeHolder != null) {
-            return placeHolder;
-        }
-        return date.getDayOfWeek().getValue() < 6 ? PlaceHolder.H8 : PlaceHolder.LO;
-    }
-
-    private List<Placement<String>> placeDate(LocalDate date, PlaceHolder placeHolder) {
+    private List<Placement<String>> placeDate(LocalDate date, DayModifier placeHolder) {
         int day = date.getDayOfMonth();
         switch (placeHolder) {
         case LO:

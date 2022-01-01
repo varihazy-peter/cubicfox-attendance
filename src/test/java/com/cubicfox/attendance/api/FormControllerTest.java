@@ -1,4 +1,4 @@
-package com.cubicfox.attendance;
+package com.cubicfox.attendance.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.cubicfox.attendance.AttendanceCalendar;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.google.common.collect.ImmutableMap;
 import java.net.URI;
@@ -26,28 +27,27 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @WebMvcTest(controllers = FormController.class)
-@ComponentScan(basePackageClasses = AttendanceProfile.class)
+@ComponentScan(basePackageClasses = { AttendanceProfile.class, FormController.class, AttendanceCalendar.class })
 class FormControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+    FormRequest.FormRequestBuilder base = FormRequest.builder().name("name").yearMonth(YearMonth.of(2020, 10));
 
     @Test
     void test_nameAndYM() throws Exception {
-        assertFormRequest("/", new FormController.FormRequest(null, null, null, null, null, null));
-        assertFormRequest("/?name=name&yearMonth=2020-10",
-                new FormController.FormRequest("name", YearMonth.of(2020, 10), null, null, null, null));
-        assertFormRequest("/?name=name&yearMonth=2020-11&h8=1&fs=2&bs=3&lo=4", new FormController.FormRequest("name",
-                YearMonth.of(2020, 11), List.of(1), List.of(2), List.of(3), List.of(4)));
+        assertFormRequest("/", FormRequest.builder().build());
+        assertFormRequest("/?name=name&yearMonth=2020-10", base.build());
+        assertFormRequest("/?name=name&yearMonth=2020-10&h8=1&fs=2&bs=3&lo=4",
+                base.h8(List.of(1)).fs(List.of(2)).bs(List.of(3)).lo(List.of(4)).build());
     }
 
-    void assertFormRequest(String uri, FormController.FormRequest expected) throws Exception {
+    void assertFormRequest(String uri, FormRequest expected) throws Exception {
         ModelAndView modelAndView = mockMvc.perform(get(URI.create(uri))).andExpect(status().isOk())
                 .andExpect(view().name("form")).andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andReturn().getModelAndView();
         assertThat(modelAndView).isNotNull();
-        FormController.FormRequest formRequest = (FormController.FormRequest) modelAndView.getModel()
-                .get("formRequest");
+        FormRequest formRequest = (FormRequest) modelAndView.getModel().get("formRequest");
         assertThat(formRequest).isNotNull().isEqualTo(expected);
     }
 

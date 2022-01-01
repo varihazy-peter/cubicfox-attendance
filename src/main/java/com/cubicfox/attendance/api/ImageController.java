@@ -1,6 +1,5 @@
 package com.cubicfox.attendance.api;
 
-import com.cubicfox.attendance.FormController;
 import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
@@ -25,10 +24,11 @@ public class ImageController {
 
     AttendanceProfile attendanceProfile;
     AttendanceImageMaker imageMaker;
+    FormRequestAdapter formRequestAdapter;
 
     @GetMapping(value = "/rest/image", produces = MediaType.IMAGE_JPEG_VALUE)
-    ResponseEntity<StreamingResponseBody> image(@Valid FormController.FormRequest imageRequest) throws IOException {
-        List<Placement<?>> placements = attendanceProfile.createPlacements(imageRequest.attendanceRequest());
+    ResponseEntity<StreamingResponseBody> image(@Valid FormRequest request) throws IOException {
+        List<Placement<?>> placements = attendanceProfile.createPlacements(formRequestAdapter.map(request));
         StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
     }
