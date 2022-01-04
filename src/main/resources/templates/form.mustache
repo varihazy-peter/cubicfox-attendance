@@ -3,7 +3,10 @@
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
+<meta name="description" content="Attendance creator for cubicfox">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -16,11 +19,11 @@
         <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2">
             <div class="col">
                 <label for="name">name</label>
-                <input type="text" name="name" class="form-control" required {{#formRequest.name}}value="{{formRequest.name}}"{{/formRequest.name}}/>
+                <input id="name" type="text" name="name" class="form-control" required {{#formRequest.name}}value="{{formRequest.name}}"{{/formRequest.name}}/>
             </div>
             <div class="col">
                 <label for="yearMonth">yearMonth</label>
-                <input type="month" name="yearMonth" class="form-control" min="2018-03" required {{#formRequest.yearMonth}}value="{{ formRequest.yearMonth }}"{{/formRequest.yearMonth}} />
+                <input id="yearMonth" type="month" name="yearMonth" class="form-control" min="2018-03" required {{#formRequest.yearMonth}}value="{{ formRequest.yearMonth }}"{{/formRequest.yearMonth}} />
             </div>
             <div class="col">
                 <label for="h8">8 Hours in case of Saturday is a working day</label>
