@@ -3,3 +3,6 @@ steps:
     args: ["clean", "spotless:check", "verify", "jib:build", "-Dimage=${_IMAGE}:$COMMIT_SHA"]
   - name: gcr.io/cloud-builders/gcloud
     args: ["run", "deploy", "$_SERVICE_NAME", "--image=${_IMAGE}:$COMMIT_SHA", "--region", "$_DEPLOY_REGION", "--platform", "$_PLATFORM", "--allow-unauthenticated"]
+
+images: ["${_IMAGE}:$COMMIT_SHA"]
+    
