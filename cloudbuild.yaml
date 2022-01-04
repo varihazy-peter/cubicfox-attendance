@@ -1,6 +1,12 @@
 steps:
 - name: gcr.io/cloud-builders/mvn
-  args: ["spotless:check", "verify"]
+  args: ["spotless:check"]
+  volumes:
+  - name: user.home
+    path: /root
+
+- name: gcr.io/cloud-builders/mvn
+  args: ["verify"]
   volumes:
   - name: user.home
     path: /root
