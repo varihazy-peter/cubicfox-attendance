@@ -6,3 +6,5 @@ steps:
 
 substitutions:
     _IMAGE: '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}'
+options:
+     dynamic_substitutions: true
