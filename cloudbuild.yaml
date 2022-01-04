@@ -1,9 +1,8 @@
 steps:
   - name: gcr.io/cloud-builders/mvn
-    args: ["spotless:check"]
-  - name: gcr.io/cloud-builders/mvn
-    args: ["verify"]
-  - name: gcr.io/cloud-builders/mvn
-    args: ["clean", "compile", "jib:build", "-Djib.to.tags=$COMMIT_SHA"]
+    args: ["clean", "spotless:check", "verify", "jib:build", "-Djib.to.tags=$COMMIT_SHA"]
   - name: gcr.io/cloud-builders/gcloud
-    args: ["run", "deploy", "$_SERVICE_NAME", "--image=europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance:$COMMIT_SHA", "--region", "$_DEPLOY_REGION", "--platform", "$_PLATFORM", "--allow-unauthenticated"]
+    args: ["run", "deploy", "$_SERVICE_NAME", "--image=${_IMAGE}:$COMMIT_SHA", "--region", "$_DEPLOY_REGION", "--platform", "$_PLATFORM", "--allow-unauthenticated"]
+
+substitutions:
+    _IMAGE: '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}'
