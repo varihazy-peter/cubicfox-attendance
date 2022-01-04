@@ -1,8 +1,33 @@
 steps:
-  - name: gcr.io/cloud-builders/mvn
-    args: ["clean", "spotless:check", "verify", "jib:dockerBuild", "-Dimage=${_IMAGE}:$COMMIT_SHA"]
-  - name: gcr.io/cloud-builders/gcloud
-    args: ["run", "deploy", "$_SERVICE_NAME", "--image=${_IMAGE}:$COMMIT_SHA", "--region", "$_DEPLOY_REGION", "--platform", "$_PLATFORM", "--allow-unauthenticated"]
+- name: gcr.io/cloud-builders/mvn
+  entrypoint: ls
+  volumes:
+  - name: user.home
+    path: /root
 
-images: ["${_IMAGE}"]
-    
+- name: gcr.io/cloud-builders/mvn
+  entrypoint: id
+  volumes:
+  - name: user.home
+    path: /root
+
+- name: gcr.io/cloud-builders/mvn
+  entrypoint: pwd
+  volumes:
+  - name: user.home
+    path: /root
+
+- name: gcr.io/cloud-builders/mvn
+  args: ["spotless:check", "verify"]
+  volumes:
+  - name: user.home
+    path: /root
+
+- name: gcr.io/cloud-builders/mvn
+  args: ["clean", "jib:build", "-Dimage=${_IMAGE}:$COMMIT_SHA"]
+  volumes:
+  - name: user.home
+    path: /root
+
+- name: gcr.io/cloud-builders/gcloud
+  args: ["run", "deploy", "$_SERVICE_NAME", "--image=${_IMAGE}:$COMMIT_SHA", "--region", "$_DEPLOY_REGION", "--platform", "$_PLATFORM", "--allow-unauthenticated"]
