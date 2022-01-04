@@ -95,9 +95,6 @@
         <artifactId>jib-maven-plugin</artifactId>
         <version>3.1.4</version>
         <configuration>
-          <to>
-            <image>europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attandance/cubicfox-attandance</image>
-          </to>
           <from>
             <image>openjdk:17-jdk@sha256:eed9a81ec17a8cdb2c7e18efcca249c87c12d0a2fec51dfeb439a06a865708b7</image>
           </from>
