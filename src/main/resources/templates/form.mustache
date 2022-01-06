@@ -27,19 +27,19 @@
             </div>
             <div class="col">
                 <label for="h8">8 Hours in case of Saturday is a working day</label>
-                <input type="text" name="h8" class="form-control" pattern="^(0[1-9]|[12]\d|3[01])(,(0[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.h8}}{{.}}{{^-last}},{{/-last}}{{/formRequest.h8}}" />
+                <input type="text" name="h8" class="form-control" pattern="^(0?[1-9]|[12]\d|3[01])(,(0?[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.h8}}{{.}}{{^-last}},{{/-last}}{{/formRequest.h8}}" />
             </div>
             <div class="col">
                 <label for="FS">FS - fizetett szabadsag</label>
-                <input type="text" name="fs" class="form-control" pattern="^(0[1-9]|[12]\d|3[01])(,(0[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.fs}}{{.}}{{^-last}},{{/-last}}{{/formRequest.fs}}" />
+                <input type="text" name="fs" class="form-control" pattern="^(0?[1-9]|[12]\d|3[01])(,(0?[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.fs}}{{.}}{{^-last}},{{/-last}}{{/formRequest.fs}}" />
             </div>
             <div class="col">
                 <label for="BS">BS - Sick leave (beteg szabi)</label>
-                <input type="text" name="bs" class="form-control" pattern="^(0[1-9]|[12]\d|3[01])(,(0[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.bs}}{{.}}{{^-last}},{{/-last}}{{/formRequest.bs}}" />
+                <input type="text" name="bs" class="form-control" pattern="^(0?[1-9]|[12]\d|3[01])(,(0?[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.bs}}{{.}}{{^-last}},{{/-last}}{{/formRequest.bs}}" />
             </div>
             <div class="col">
                 <label for="LO">LO - LeaveOut</label>
-                <input type="text" name="lo" class="form-control" pattern="^(0[1-9]|[12]\d|3[01])(,(0[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.lo}}{{.}}{{^-last}},{{/-last}}{{/formRequest.lo}}"/>
+                <input type="text" name="lo" class="form-control" pattern="^(0?[1-9]|[12]\d|3[01])(,(0?[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.lo}}{{.}}{{^-last}},{{/-last}}{{/formRequest.lo}}"/>
             </div>
         </div>
 
