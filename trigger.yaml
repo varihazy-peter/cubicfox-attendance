@@ -1,0 +1,17 @@
+description: Build and deploy to Cloud Run service cubicfox-attandance on push to main
+filename: cloudbuild.yaml
+github:
+  name: cubicfox-attendance
+  owner: varihazy-peter
+  push:
+    branch: ^main$
+name: cubicfox-attendance
+substitutions:
+  _DEPLOY_REGION: europe-north1
+  _IMAGE: europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attendance/cubicfox-attendance
+  _PLATFORM: managed
+  _SERVICE_NAME: cubicfox-attendance
+tags:
+- gcp-cloud-build-deploy-cloud-run
+- gcp-cloud-build-deploy-cloud-run-managed
+- cubicfox-attandance

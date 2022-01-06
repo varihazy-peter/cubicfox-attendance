@@ -43,6 +43,5 @@ mvn clean compile jib:dockerBuild -Dimage=cubicfox-attendance:dirty
 # GCP
 There are an already deploy version on GCP.
 
-```sh
-gcloud run deploy cubicfox-attendance --image=europe-north1-docker.pkg.dev/cubicfox-attendance/cubicfox-attendance/cubicfox-attendance:28d0f43ac34ac566b42a18a9e969813a6c954eb7 --region europe-north1 --platform managed
-```
+Check the deploy process in `cloudbuild.yaml`
+
