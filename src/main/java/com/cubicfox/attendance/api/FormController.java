@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -38,6 +40,8 @@ public class FormController {
     ModelAndView form(@Valid FormRequest formRequest, BindingResult bindingResult, Model model) throws IOException {
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(e -> log.warn("{}", e));
+            model.addAttribute("errors", bindingResult.getAllErrors().stream().map(ObjectError::toString)
+                    .collect(Collectors.toUnmodifiableList()));
         }
         return new ModelAndView("form", model.asMap());
     }

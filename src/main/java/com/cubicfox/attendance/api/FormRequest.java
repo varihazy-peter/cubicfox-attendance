@@ -13,6 +13,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Value;
 
@@ -34,6 +35,15 @@ public class FormRequest {
     List<@Valid @Min(1) @Max(31) Integer> fs;
     List<@Valid @Min(1) @Max(31) Integer> bs;
     List<@Valid @Min(1) @Max(31) Integer> lo;
+
+    @Size(max = 0, message = "Conflicting days {value}")
+    public List<Integer> getConflictingDays() {
+        return placeHolders().values().stream().flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(d -> d, Collectors.counting()))
+                // map<day,count>
+                .entrySet().stream().filter(e -> e.getValue().longValue() != 1l).map(Map.Entry::getKey)
+                .collect(Collectors.toUnmodifiableList());
+    }
 
     Map<DayModifier, ? extends Collection<Integer>> placeHolders() {
         return Map.of( //
