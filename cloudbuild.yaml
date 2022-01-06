@@ -17,8 +17,7 @@ steps:
   - name: user.home
     path: /root
 
-- name: gcr.io/google.com/cloudsdktool/cloud-sdk:367.0.0-alpine
-  entrypoint: gcloud
+- name: gcr.io/cloud-builders/gcloud
   args: [
     "run", 
     "deploy", 
