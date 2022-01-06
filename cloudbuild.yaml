@@ -18,4 +18,20 @@ steps:
     path: /root
 
 - name: gcr.io/cloud-builders/gcloud
-  args: ["run", "deploy", "$_SERVICE_NAME", "--image=${_IMAGE}:$COMMIT_SHA", "--region", "$_DEPLOY_REGION", "--platform", "$_PLATFORM", "--allow-unauthenticated"]
+  args: [
+    "run", 
+    "deploy", 
+    "$_SERVICE_NAME", 
+    "--image=${_IMAGE}:$COMMIT_SHA", 
+    "--region=$_DEPLOY_REGION", 
+    "--platform=$_PLATFORM", 
+    "--allow-unauthenticated", 
+    "--ingress=all", 
+    "--concurrency=80",
+    "--cpu=1",
+    "--memory=512Mi",
+    "--min-instances=0",
+    "--use-http2",
+    "--set-env-vars=",
+    "--set-cloudsql-instances="
+    ]
