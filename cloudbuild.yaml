@@ -1,18 +1,18 @@
 steps:
 - name: gcr.io/cloud-builders/mvn
-  args: ["spotless:check"]
+  args: ["-B", "spotless:check"]
   volumes:
   - name: user.home
     path: /root
 
 - name: gcr.io/cloud-builders/mvn
-  args: ["verify"]
+  args: ["-B", "verify"]
   volumes:
   - name: user.home
     path: /root
 
 - name: gcr.io/cloud-builders/mvn
-  args: ["clean", "compile", "jib:build", "-Dimage=${_IMAGE}:$COMMIT_SHA"]
+  args: ["-B", "clean", "compile", "jib:build", "-Dimage=${_IMAGE}:$COMMIT_SHA"]
   volumes:
   - name: user.home
     path: /root
