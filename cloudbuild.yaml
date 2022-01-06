@@ -17,7 +17,7 @@ steps:
   - name: user.home
     path: /root
 
-- name: gcr.io/google.com/cloudsdktool/cloud-sdk:367.0.0-slim
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk:367.0.0-alpine
   entrypoint: gcloud
   args: [
     "run", 
