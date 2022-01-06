@@ -34,7 +34,7 @@ class AttendanceProfileTest {
 
     @Test
     void test() {
-        var dto = new MonthlyAttendance("name", YearMonth.of(2021, 1), days);
+        MonthlyAttendance dto = new MonthlyAttendance("name", YearMonth.of(2021, 1), days);
         List<Placement<?>> placements = attendanceProfile.createPlacements(dto);
         Map<String, Long> texts = placements.stream().map(Placement::getObject).map(String::valueOf)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));

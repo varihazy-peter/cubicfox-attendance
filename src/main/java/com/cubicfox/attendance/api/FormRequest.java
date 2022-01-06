@@ -45,7 +45,7 @@ public class FormRequest {
     }
 
     Map<String, String> params() {
-        var map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         addIf(map, "name", name);
         addIf(map, "yearMonth", yearMonth);
         addIf(map, "h8", h8);

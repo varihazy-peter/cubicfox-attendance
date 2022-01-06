@@ -45,6 +45,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+      <scope>provided</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -96,7 +97,7 @@
         <version>3.1.4</version>
         <configuration>
           <from>
-            <image>openjdk:17-jdk@sha256:eed9a81ec17a8cdb2c7e18efcca249c87c12d0a2fec51dfeb439a06a865708b7</image>
+            <image>eclipse-temurin:17-jre@sha256:cd9348b813e7db99a6a00a80016162b2c236555f118a0937267c827d668cf392</image>
           </from>
         </configuration>
       </plugin>
