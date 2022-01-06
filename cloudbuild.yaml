@@ -33,6 +33,7 @@ steps:
     "--memory=512Mi",
     "--min-instances=0",
     "--use-http2",
-    "--set-env-vars=",
+    "--set-env-vars",
+    "JAVA_TOOL_OPTIONS=-XX:+TieredCompilation -XX:TieredStopAtLevel=1",
     "--set-cloudsql-instances="
     ]
