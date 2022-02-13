@@ -4,6 +4,7 @@ import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import java.io.IOException;
+import java.nio.channels.Channels;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -29,7 +30,8 @@ public class ImageController {
     @GetMapping(value = "/rest/image", produces = MediaType.IMAGE_JPEG_VALUE)
     ResponseEntity<StreamingResponseBody> image(@Valid FormRequest request) throws IOException {
         List<Placement<?>> placements = attendanceProfile.createPlacements(formRequestAdapter.map(request));
-        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
+        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE,
+                Channels.newChannel(os));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
     }
 

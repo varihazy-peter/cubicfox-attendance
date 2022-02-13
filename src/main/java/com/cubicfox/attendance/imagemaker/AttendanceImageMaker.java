@@ -1,16 +1,17 @@
 package com.cubicfox.attendance.imagemaker;
 
+import com.cubicfox.attendance.CountableWritableByteChannel;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import com.google.common.collect.Iterators;
-import com.google.common.io.CountingOutputStream;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -33,7 +34,7 @@ public class AttendanceImageMaker {
         }
     }
 
-    public long write(List<Placement<?>> placements, String MIMEType, OutputStream os) {
+    public long write(List<Placement<?>> placements, String MIMEType, WritableByteChannel os) {
         BufferedImage res = bufferedImage();
         {
             Graphics graphics = res.getGraphics();
@@ -42,12 +43,11 @@ public class AttendanceImageMaker {
             placements.forEach(p -> placeText(graphics, p));
             graphics.dispose();
         }
-        try {
+        try (CountableWritableByteChannel cwbs = CountableWritableByteChannel.of(os)) {
             ImageWriter imageWriter = Iterators.get(ImageIO.getImageWritersByMIMEType(MIMEType), 0);
-            CountingOutputStream cos = new CountingOutputStream(os);
-            imageWriter.setOutput(ImageIO.createImageOutputStream(cos));
+            imageWriter.setOutput(ImageIO.createImageOutputStream(Channels.newOutputStream(cwbs)));
             imageWriter.write(res);
-            return cos.getCount();
+            return cwbs.getCount();
         } catch (IOException e) {
             throw new UncheckedIOException("Cannot write", e);
         }

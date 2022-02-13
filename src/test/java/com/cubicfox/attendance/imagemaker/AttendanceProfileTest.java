@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
@@ -50,7 +51,7 @@ class AttendanceProfileTest {
     private void write(List<Placement<?>> placements) {
         Instant start = Instant.now();
         try (OutputStream os = new FileOutputStream(Files.createTempFile("test-attendance", ".jpeg").toFile())) {
-            attendanceImageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
+            attendanceImageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, Channels.newChannel(os));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

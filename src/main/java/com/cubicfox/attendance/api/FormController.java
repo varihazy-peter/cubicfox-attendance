@@ -5,6 +5,7 @@ import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.channels.Channels;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,7 +57,8 @@ public class FormController {
             return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).headers(headers).build();
         }
         List<Placement<?>> placements = attendanceProfile.createPlacements(formRequestAdapter.map(request));
-        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
+        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE,
+                Channels.newChannel(os));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
     }
 
