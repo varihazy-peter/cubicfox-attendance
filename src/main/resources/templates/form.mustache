@@ -41,6 +41,10 @@
                 <label for="LO">LO - LeaveOut</label>
                 <input type="text" name="lo" class="form-control" pattern="^(0?[1-9]|[12]\d|3[01])(,(0?[1-9]|[12]\d|3[01]))*$" placeholder="1,22" value="{{#formRequest.lo}}{{.}}{{^-last}},{{/-last}}{{/formRequest.lo}}"/>
             </div>
+            <div class="col">
+                <input type="checkbox" name="noCalendarHelper" class="form-check-input" {{#formRequest.noCalendarHelper}}checked{{/formRequest.noCalendarHelper}}/>
+                <label for="noCalendarHelper" class="form-check-label">do not use Calendar to fill the days</label>
+            </div>
         </div>
         <div class="row row-cols-1">
             <div class="col">

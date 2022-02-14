@@ -1,12 +1,13 @@
 package com.cubicfox.attendance.imagemaker;
 
-import com.cubicfox.attendance.CountableWritableByteChannel;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import com.google.common.collect.Iterators;
+import com.google.common.io.CountingOutputStream;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -35,22 +36,25 @@ public class AttendanceImageMaker {
     }
 
     public long write(List<Placement<?>> placements, String MIMEType, WritableByteChannel os) {
-        BufferedImage res = bufferedImage();
-        {
-            Graphics graphics = res.getGraphics();
-            graphics.drawImage(img, 0, 0, null);
-            graphics.setColor(new Color(0, 0, 0, 255));
-            placements.forEach(p -> placeText(graphics, p));
-            graphics.dispose();
-        }
-        try (CountableWritableByteChannel cwbs = CountableWritableByteChannel.of(os)) {
+        WritableRenderedImage res = image(placements);
+        try (CountingOutputStream cos = new CountingOutputStream(Channels.newOutputStream(os))) {
             ImageWriter imageWriter = Iterators.get(ImageIO.getImageWritersByMIMEType(MIMEType), 0);
-            imageWriter.setOutput(ImageIO.createImageOutputStream(Channels.newOutputStream(cwbs)));
+            imageWriter.setOutput(ImageIO.createImageOutputStream(cos));
             imageWriter.write(res);
-            return cwbs.getCount();
+            return cos.getCount();
         } catch (IOException e) {
             throw new UncheckedIOException("Cannot write", e);
         }
+    }
+
+    private WritableRenderedImage image(List<Placement<?>> placements) {
+        BufferedImage res = bufferedImage();
+        Graphics graphics = res.getGraphics();
+        graphics.drawImage(img, 0, 0, null);
+        graphics.setColor(new Color(0, 0, 0, 255));
+        placements.forEach(p -> placeText(graphics, p));
+        graphics.dispose();
+        return res;
     }
 
     private void placeText(Graphics graphics, Placement<?> placement) {

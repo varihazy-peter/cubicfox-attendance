@@ -32,13 +32,13 @@ class FormRequestAdapterTest {
 
     @Test
     void test_empty_withoutCalendar() {
-        MonthlyAttendance calculated = this.formRequestAdapter.map(base.useCalendar(false).build());
+        MonthlyAttendance calculated = this.formRequestAdapter.map(base.noCalendarHelper(true).build());
         assertThat(calculated).isEqualTo(new MonthlyAttendance(name, ym202110, Map.of()));
     }
 
     @Test
     void test_empty_withCalendar() {
-        MonthlyAttendance calculated = this.formRequestAdapter.map(base.useCalendar(true).build());
+        MonthlyAttendance calculated = this.formRequestAdapter.map(base.noCalendarHelper(false).build());
         assertThat(calculated.getName()).isEqualTo(name);
         assertThat(calculated.getYearMonth()).isEqualTo(ym202110);
         assertThat(calculated.getDays()).containsOnlyKeys(Ints.asList(ym202110Days));

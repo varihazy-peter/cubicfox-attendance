@@ -6,11 +6,9 @@ import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import java.io.IOException;
 import java.nio.channels.Channels;
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +31,5 @@ public class ImageController {
         StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE,
                 Channels.newChannel(os));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
-    }
-
-    @Value
-    static class Valami {
-        Map<String, String> errors;
     }
 }

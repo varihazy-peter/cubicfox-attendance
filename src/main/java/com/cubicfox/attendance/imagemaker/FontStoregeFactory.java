@@ -19,7 +19,7 @@ public class FontStoregeFactory implements FactoryBean<FontStorege> {
     Class<FontStorege> objectType = FontStorege.class;
 
     @Override
-    public FontStorege getObject() throws Exception {
+    public FontStorege getObject() {
         Font defaultFont = loadResourceFont(defaultFontResourcePath);
         return new FontStorege(defaultFont.deriveFont(82f), defaultFont.deriveFont(72f), defaultFont.deriveFont(180f),
                 defaultFont.deriveFont(40f));

@@ -25,10 +25,10 @@ public class FormRequest {
     @NotNull
     YearMonth yearMonth;
 
-    Boolean useCalendar;
+    Boolean noCalendarHelper;
 
     boolean useCalendar() {
-        return useCalendar == null || useCalendar.booleanValue();
+        return noCalendarHelper == null || !noCalendarHelper.booleanValue();
     }
 
     List<@Valid @Min(1) @Max(31) Integer> h8;
