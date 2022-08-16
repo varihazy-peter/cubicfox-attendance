@@ -13,12 +13,17 @@ The source code is compatible with 8 `-Djava.version=8`
 
 # verify
 
-Check the formatting with `spotless:check` goal.
-
 Running the test
 
 ```sh
 mvn verify
+```
+Check the formatting with `spotless:check` goal.
+
+Check dependencies with owasp plugin 
+
+```sh
+mvn org.owasp:dependency-check-maven:check
 ```
 
 # run locally
