@@ -1,6 +1,6 @@
 package com.cubicfox.attendance.imagemaker;
 
-import com.cubicfox.attendance.domain.DayModifier;
+import com.cubicfox.attendance.domain.DayDescription;
 import com.cubicfox.attendance.domain.MonthlyAttendance;
 import java.awt.Font;
 import java.time.LocalDate;
@@ -8,6 +8,7 @@ import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
@@ -60,26 +61,18 @@ public class AttendanceProfile {
         );
     }
 
-    private List<Placement<String>> placeDate(LocalDate date, DayModifier placeHolder) {
+    private List<Placement<String>> placeDate(LocalDate date, DayDescription dayDescription) {
         int day = date.getDayOfMonth();
-        switch (placeHolder) {
-        case LO:
-            return List.of( //
-                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()));
-        case FS:
-        case BS:
-            return List.of( //
-                    placeText(placeHolder.getText(), calculateCord(day, Offset.FS), fontStorege.getFontH()),
-                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()));
-        case H8:
-            return List.of( //
-                    placeText(st, calculateCord(day, Offset.Time1), fontStorege.getFontT()),
-                    placeText(et, calculateCord(day, Offset.Time2), fontStorege.getFontT()),
-                    placeText(h, calculateCord(day, Offset.TimeH), fontStorege.getFontH()),
-                    placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()));
-        default:
-            throw new IllegalStateException("not handled placeHolder " + placeHolder);
-        }
+        return Stream.of( //
+                placeText(date.getDayOfWeek().name(), calculateCord(day, Offset.DOW), fontStorege.getFontDOW()), //
+                dayDescription.getText() == null ? null
+                        : placeText(dayDescription.getText(), calculateCord(day, Offset.FS), fontStorege.getFontH()), //
+                dayDescription.getStart() == null ? null
+                        : placeText(dayDescription.getStart(), calculateCord(day, Offset.Time1),
+                                fontStorege.getFontT()), //
+                dayDescription.getEnd() == null ? null
+                        : placeText(dayDescription.getEnd(), calculateCord(day, Offset.Time2), fontStorege.getFontT()) //
+        ).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     private <T> Placement<T> placeText(T object, Point point, Font font) {

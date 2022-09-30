@@ -9,9 +9,9 @@ public class MonthlyAttendance {
 
     String name;
     YearMonth yearMonth;
-    Map<Integer, DayModifier> days;
+    Map<Integer, DayDescription> days;
 
-    public MonthlyAttendance(String name, YearMonth yearMonth, Map<Integer, DayModifier> days) {
+    public MonthlyAttendance(String name, YearMonth yearMonth, Map<Integer, DayDescription> days) {
         this.name = name;
         this.yearMonth = yearMonth;
         this.days = Map.copyOf(days);

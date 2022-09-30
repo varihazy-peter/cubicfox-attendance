@@ -2,6 +2,7 @@ package com.cubicfox.attendance.imagemaker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cubicfox.attendance.domain.DayDescription;
 import com.cubicfox.attendance.domain.DayModifier;
 import com.cubicfox.attendance.domain.MonthlyAttendance;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
@@ -31,7 +32,7 @@ class AttendanceProfileTest {
 
     @Autowired
     AttendanceProfile attendanceProfile;
-    Map<Integer, DayModifier> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS);
+    Map<Integer, DayDescription> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS);
 
     @Test
     void test() {

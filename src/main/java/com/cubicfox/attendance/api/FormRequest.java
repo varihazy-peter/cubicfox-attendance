@@ -1,5 +1,6 @@
 package com.cubicfox.attendance.api;
 
+import com.cubicfox.attendance.domain.DayDescription;
 import com.cubicfox.attendance.domain.DayModifier;
 import java.time.YearMonth;
 import java.util.Collection;
@@ -45,10 +46,10 @@ public class FormRequest {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    Map<DayModifier, ? extends Collection<Integer>> placeHolders() {
+    Map<DayDescription, ? extends Collection<Integer>> placeHolders() {
         return Map.of( //
                 DayModifier.FS, fs == null ? List.of() : fs, //
-                DayModifier.H8, h8 == null ? List.of() : h8, //
+                DayDescription.H8, h8 == null ? List.of() : h8, //
                 DayModifier.BS, bs == null ? List.of() : bs, //
                 DayModifier.LO, lo == null ? List.of() : lo //
         );

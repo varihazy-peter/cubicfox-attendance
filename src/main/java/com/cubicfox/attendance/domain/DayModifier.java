@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum DayModifier {
+public enum DayModifier implements DayDescription {
     LO(null), // special, no text representation; indicates the day should leave out
-    FS, BS, H8("8");
+    FS, BS;
 
     private DayModifier() {
         this.text = this.name();
@@ -19,5 +19,17 @@ public enum DayModifier {
 
     public boolean display() {
         return text != null;
+    }
+
+    @Override
+    public String getStart() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getEnd() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
