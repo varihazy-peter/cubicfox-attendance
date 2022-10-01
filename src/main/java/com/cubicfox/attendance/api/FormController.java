@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +48,14 @@ public class FormController {
                     .collect(Collectors.toUnmodifiableList()));
         }
         Map<String, Object> modelMap = model.asMap();
-        modelMap.put("workCalendar", Arrays.stream(WorkCalendar.values())
-                .map(wc -> Map.of("name", wc.name(), "selected", formRequest.getWorkCalendar() == wc ? "selected" : ""))
-                .toList());
+        modelMap.put(
+                "workCalendar", Stream
+                        .concat(Stream
+                                .of(Map.of("name", "NONE", "value", "", "selected",
+                                        formRequest.getWorkCalendar() == null ? "selected" : "")),
+                                Arrays.stream(WorkCalendar.values()).map(wc -> Map.of("name", wc.name(), "value",
+                                        wc.name(), "selected", formRequest.getWorkCalendar() == wc ? "selected" : "")))
+                        .toList());
         return new ModelAndView("form", modelMap);
     }
 
