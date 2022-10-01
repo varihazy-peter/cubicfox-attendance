@@ -37,8 +37,8 @@ class AttendanceProfileTest {
     @Test
     void test() {
         MonthlyAttendance dto = new MonthlyAttendance("name", YearMonth.of(2021, 1), days);
-        List<Placement<?>> placements = attendanceProfile.createPlacements(dto);
-        Map<String, Long> texts = placements.stream().map(Placement::getObject).map(String::valueOf)
+        List<Placement> placements = attendanceProfile.createPlacements(dto);
+        Map<String, Long> texts = placements.stream().map(Placement::getText)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         log.info("{}", texts);
         assertThat(texts).containsAllEntriesOf(
@@ -49,7 +49,7 @@ class AttendanceProfileTest {
 
     private AttendanceImageMaker attendanceImageMaker = new AttendanceImageMaker();
 
-    private void write(List<Placement<?>> placements) {
+    private void write(List<Placement> placements) {
         Instant start = Instant.now();
         try (OutputStream os = new FileOutputStream(Files.createTempFile("test-attendance", ".jpeg").toFile())) {
             attendanceImageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, Channels.newChannel(os));

@@ -1,7 +1,5 @@
 package com.cubicfox.attendance.domain;
 
-import lombok.Value;
-
 public interface DayDescription {
 
     public final static DayDescription H8 = of("8", "09:00", "17:30");
@@ -16,7 +14,7 @@ public interface DayDescription {
         return new ImmutableDayDescription(text, null, null);
     }
 
-    static DayDescription of(String start, String end, String text) {
+    static DayDescription of(String text, String start, String end) {
         return new ImmutableDayDescription(text, start, end);
     }
 

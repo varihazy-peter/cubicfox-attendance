@@ -35,7 +35,7 @@ public class AttendanceImageMaker {
         }
     }
 
-    public long write(List<Placement<?>> placements, String MIMEType, WritableByteChannel os) {
+    public long write(List<Placement> placements, String MIMEType, WritableByteChannel os) {
         WritableRenderedImage res = image(placements);
         try (CountingOutputStream cos = new CountingOutputStream(Channels.newOutputStream(os))) {
             ImageWriter imageWriter = Iterators.get(ImageIO.getImageWritersByMIMEType(MIMEType), 0);
@@ -47,7 +47,7 @@ public class AttendanceImageMaker {
         }
     }
 
-    private WritableRenderedImage image(List<Placement<?>> placements) {
+    private WritableRenderedImage image(List<Placement> placements) {
         BufferedImage res = bufferedImage();
         Graphics graphics = res.getGraphics();
         graphics.drawImage(img, 0, 0, null);
@@ -57,7 +57,7 @@ public class AttendanceImageMaker {
         return res;
     }
 
-    private void placeText(Graphics graphics, Placement<?> placement) {
+    private void placeText(Graphics graphics, Placement placement) {
         Font oldFont = graphics.getFont();
         graphics.setFont(placement.getFont());
         graphics.drawString(placement.text(), placement.getX(), placement.getY());
