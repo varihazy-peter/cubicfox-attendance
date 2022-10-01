@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 
-import com.cubicfox.attendance.AttendanceCalendar;
+import com.cubicfox.attendance.DayCalculator;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(controllers = ImageController.class)
-@ComponentScan(basePackageClasses = { AttendanceProfile.class, FormRequestAdapter.class, AttendanceCalendar.class })
+@ComponentScan(basePackageClasses = { AttendanceProfile.class, FormRequestAdapter.class, DayCalculator.class })
 class ImageControllerTest {
     @Autowired
     MockMvc mockMvc;

@@ -11,13 +11,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AttendanceCalendar {
+public class DayCalculator {
     public Map<Integer, DayDescription> calculateDaysModifiers(final YearMonth yearMonth,
             final Map<Integer, DayDescription> base) {
         return IntStream.rangeClosed(1, yearMonth.atEndOfMonth().getDayOfMonth())
                 .mapToObj(d -> calculateDayIfneeded(yearMonth, d, base.get(d)))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-
     }
 
     private Map.Entry<Integer, DayDescription> calculateDayIfneeded(final YearMonth yearMonth, int dayOfMonth,

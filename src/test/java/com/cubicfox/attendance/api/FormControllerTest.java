@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.cubicfox.attendance.AttendanceCalendar;
+import com.cubicfox.attendance.DayCalculator;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.google.common.collect.ImmutableMap;
 import java.net.URI;
@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @WebMvcTest(controllers = FormController.class)
-@ComponentScan(basePackageClasses = { AttendanceProfile.class, FormController.class, AttendanceCalendar.class })
+@ComponentScan(basePackageClasses = { AttendanceProfile.class, FormController.class, DayCalculator.class })
 class FormControllerTest {
 
     @Autowired

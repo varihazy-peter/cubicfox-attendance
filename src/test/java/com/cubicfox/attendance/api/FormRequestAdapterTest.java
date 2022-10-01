@@ -3,7 +3,7 @@ package com.cubicfox.attendance.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.cubicfox.attendance.AttendanceCalendar;
+import com.cubicfox.attendance.DayCalculator;
 import com.cubicfox.attendance.domain.MonthlyAttendance;
 import com.google.common.primitives.Ints;
 import java.time.YearMonth;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = { FormRequestAdapter.class, AttendanceCalendar.class })
+@SpringBootTest(classes = { FormRequestAdapter.class, DayCalculator.class })
 class FormRequestAdapterTest {
     @Autowired
     FormRequestAdapter formRequestAdapter;

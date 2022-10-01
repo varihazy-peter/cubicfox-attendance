@@ -1,6 +1,6 @@
 package com.cubicfox.attendance.api;
 
-import com.cubicfox.attendance.AttendanceCalendar;
+import com.cubicfox.attendance.DayCalculator;
 import com.cubicfox.attendance.domain.DayDescription;
 import com.cubicfox.attendance.domain.MonthlyAttendance;
 import java.util.Collection;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 class FormRequestAdapter {
-    private final AttendanceCalendar attendanceCalendar;
+    private final DayCalculator dayCalculator;
 
     public MonthlyAttendance map(FormRequest request) {
         Map<Integer, DayDescription> days = request.useCalendar()
-                ? attendanceCalendar.calculateDaysModifiers(request.getYearMonth(), this.daysOf(request))
+                ? dayCalculator.calculateDaysModifiers(request.getYearMonth(), this.daysOf(request))
                 : this.daysOf(request);
         return new MonthlyAttendance(request.getName(), request.getYearMonth(), days);
     }
