@@ -32,7 +32,8 @@ class AttendanceProfileTest {
 
     @Autowired
     AttendanceProfile attendanceProfile;
-    Map<Integer, DayDescription> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS, 5, DayModifier.H9, 6, DayModifier.H9_5);
+    Map<Integer, DayDescription> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS, 5,
+            DayModifier.H9, 6, DayModifier.H9_5);
 
     @Test
     void test() {

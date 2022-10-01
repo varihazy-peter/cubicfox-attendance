@@ -69,7 +69,8 @@ class FormControllerTest {
 
     @Test
     void test_image_ok() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get(URI.create("/image?name=name&yearMonth=2020-11&hours=1&fs=2&bs=3&lo=4")))
+        MvcResult mvcResult = mockMvc
+                .perform(get(URI.create("/image?name=name&yearMonth=2020-11&hours=1&fs=2&bs=3&lo=4")))
                 .andExpect(status().isOk()).andReturn();
         byte[] content = mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.IMAGE_JPEG)).andReturn()
