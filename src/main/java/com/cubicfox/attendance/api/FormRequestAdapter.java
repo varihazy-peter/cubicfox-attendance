@@ -17,9 +17,8 @@ class FormRequestAdapter {
     private final DayCalculator dayCalculator;
 
     public MonthlyAttendance map(FormRequest request) {
-        Map<Integer, DayDescription> days = request.useCalendar()
-                ? dayCalculator.calculateDaysModifiers(request.getYearMonth(), this.daysOf(request))
-                : this.daysOf(request);
+        Map<Integer, DayDescription> days = request.getWorkCalendar() != null ? dayCalculator.calculateDaysModifiers(
+                request.getYearMonth(), this.daysOf(request), request.getWorkCalendar()) : this.daysOf(request);
         return new MonthlyAttendance(request.getName(), request.getYearMonth(), days);
     }
 

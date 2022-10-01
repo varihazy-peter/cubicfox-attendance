@@ -12,23 +12,24 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class DayCalculator {
-    public Map<Integer, DayDescription> calculateDaysModifiers(final YearMonth yearMonth,
-            final Map<Integer, DayDescription> base) {
+    public Map<Integer, DayDescription> calculateDaysModifiers( //
+            final YearMonth yearMonth, final Map<Integer, DayDescription> base, WorkCalendar workCalendar) {
         return IntStream.rangeClosed(1, yearMonth.atEndOfMonth().getDayOfMonth())
-                .mapToObj(d -> calculateDayIfneeded(yearMonth, d, base.get(d)))
+                .mapToObj(d -> calculateDayIfneeded(yearMonth, d, base.get(d), workCalendar))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private Map.Entry<Integer, DayDescription> calculateDayIfneeded(final YearMonth yearMonth, int dayOfMonth,
-            final DayDescription modifier) {
-        return Map.entry(dayOfMonth, modifier != null ? modifier : this.calculateDayModifier(yearMonth, dayOfMonth));
+            final DayDescription modifier, WorkCalendar workCalendar) {
+        return Map.entry(dayOfMonth,
+                modifier != null ? modifier : this.calculateDayModifier(yearMonth, dayOfMonth, workCalendar));
     }
 
     /**
      * The logic to calculate the a day modifier is to look up if it is a weekend or not. This works most of cases. In
      * case of more complex logic needed (like calling an holiday API the calculation require an additional component).
      */
-    private DayDescription calculateDayModifier(final YearMonth yearMonth, int dayOfMonth) {
-        return yearMonth.atDay(dayOfMonth).getDayOfWeek().getValue() < 6 ? DayDescription.H8 : DayModifier.LO;
+    private DayDescription calculateDayModifier(final YearMonth yearMonth, int dayOfMonth, WorkCalendar workCalendar) {
+        return workCalendar.isWorkDay(yearMonth.atDay(dayOfMonth)) ? workCalendar.getDayDescription() : DayModifier.LO;
     }
 }

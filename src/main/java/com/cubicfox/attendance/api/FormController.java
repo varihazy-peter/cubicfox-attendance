@@ -1,11 +1,13 @@
 package com.cubicfox.attendance.api;
 
+import com.cubicfox.attendance.WorkCalendar;
 import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.channels.Channels;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,7 +46,11 @@ public class FormController {
             model.addAttribute("errors", bindingResult.getAllErrors().stream().map(ObjectError::toString)
                     .collect(Collectors.toUnmodifiableList()));
         }
-        return new ModelAndView("form", model.asMap());
+        Map<String, Object> modelMap = model.asMap();
+        modelMap.put("workCalendar", Arrays.stream(WorkCalendar.values())
+                .map(wc -> Map.of("name", wc.name(), "selected", formRequest.getWorkCalendar() == wc ? "selected" : ""))
+                .toList());
+        return new ModelAndView("form", modelMap);
     }
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)

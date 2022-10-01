@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.cubicfox.attendance.DayCalculator;
+import com.cubicfox.attendance.WorkCalendar;
 import com.cubicfox.attendance.domain.MonthlyAttendance;
 import com.google.common.primitives.Ints;
 import java.time.YearMonth;
@@ -32,13 +33,13 @@ class FormRequestAdapterTest {
 
     @Test
     void test_empty_withoutCalendar() {
-        MonthlyAttendance calculated = this.formRequestAdapter.map(base.noCalendarHelper(true).build());
+        MonthlyAttendance calculated = this.formRequestAdapter.map(base.workCalendar(null).build());
         assertThat(calculated).isEqualTo(new MonthlyAttendance(name, ym202110, Map.of()));
     }
 
     @Test
     void test_empty_withCalendar() {
-        MonthlyAttendance calculated = this.formRequestAdapter.map(base.noCalendarHelper(false).build());
+        MonthlyAttendance calculated = this.formRequestAdapter.map(base.workCalendar(WorkCalendar.D5H8).build());
         assertThat(calculated.getName()).isEqualTo(name);
         assertThat(calculated.getYearMonth()).isEqualTo(ym202110);
         assertThat(calculated.getDays()).containsOnlyKeys(Ints.asList(ym202110Days));
