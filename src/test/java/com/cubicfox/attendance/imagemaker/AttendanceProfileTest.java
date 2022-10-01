@@ -32,7 +32,7 @@ class AttendanceProfileTest {
 
     @Autowired
     AttendanceProfile attendanceProfile;
-    Map<Integer, DayDescription> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS);
+    Map<Integer, DayDescription> days = Map.of(1, DayModifier.LO, 3, DayModifier.H8, 4, DayModifier.FS, 5, DayModifier.H9, 6, DayModifier.H9_5);
 
     @Test
     void test() {
@@ -42,7 +42,7 @@ class AttendanceProfileTest {
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         log.info("{}", texts);
         assertThat(texts).containsAllEntriesOf(
-                Map.of("január", 1l, "8", 1l, "name", 1l, "2021", 1l, "17:30", 1l, "FS", 1l, "09:00", 1l));
+                Map.of("január", 1l, "8", 1l, "name", 1l, "2021", 1l, "17:30", 1l, "FS", 1l, "09:00", 3l));
 
         this.write(placements);
     }

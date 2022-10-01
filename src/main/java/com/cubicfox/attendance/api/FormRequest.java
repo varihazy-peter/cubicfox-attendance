@@ -32,7 +32,7 @@ public class FormRequest {
         return noCalendarHelper == null || !noCalendarHelper.booleanValue();
     }
 
-    List<@Valid @Min(1) @Max(31) Integer> h8;
+    List<@Valid @Min(1) @Max(31) Integer> hours;
     List<@Valid @Min(1) @Max(31) Integer> fs;
     List<@Valid @Min(1) @Max(31) Integer> bs;
     List<@Valid @Min(1) @Max(31) Integer> lo;
@@ -49,7 +49,7 @@ public class FormRequest {
     Map<DayDescription, ? extends Collection<Integer>> placeHolders() {
         return Map.of( //
                 DayModifier.FS, fs == null ? List.of() : fs, //
-                DayDescription.H8, h8 == null ? List.of() : h8, //
+                DayDescription.H9_5, hours == null ? List.of() : hours, //
                 DayModifier.BS, bs == null ? List.of() : bs, //
                 DayModifier.LO, lo == null ? List.of() : lo //
         );
@@ -59,7 +59,7 @@ public class FormRequest {
         Map<String, String> map = new HashMap<String, String>();
         addIf(map, "name", name);
         addIf(map, "yearMonth", yearMonth);
-        addIf(map, "h8", h8);
+        addIf(map, "hours", hours);
         addIf(map, "fs", fs);
         addIf(map, "bs", bs);
         addIf(map, "lo", lo);

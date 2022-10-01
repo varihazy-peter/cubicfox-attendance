@@ -26,7 +26,7 @@ class FormRequestAdapterTest {
 
     @Test
     void test_conflictingDay() {
-        FormRequest request = base.lo(List.of(1)).h8(List.of(1, 2)).build();
+        FormRequest request = base.lo(List.of(1)).hours(List.of(1, 2)).build();
         assertThatThrownBy(() -> this.formRequestAdapter.map(request)).isInstanceOf(RuntimeException.class);
     }
 

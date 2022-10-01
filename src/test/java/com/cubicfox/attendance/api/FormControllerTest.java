@@ -38,8 +38,8 @@ class FormControllerTest {
     void test_nameAndYM() throws Exception {
         assertFormRequest("/", FormRequest.builder().build());
         assertFormRequest("/?name=name&yearMonth=2020-10", base.build());
-        assertFormRequest("/?name=name&yearMonth=2020-10&h8=1&fs=2&bs=3&lo=4",
-                base.h8(List.of(1)).fs(List.of(2)).bs(List.of(3)).lo(List.of(4)).build());
+        assertFormRequest("/?name=name&yearMonth=2020-10&hours=1&fs=2&bs=3&lo=4",
+                base.hours(List.of(1)).fs(List.of(2)).bs(List.of(3)).lo(List.of(4)).build());
     }
 
     void assertFormRequest(String uri, FormRequest expected) throws Exception {
@@ -69,7 +69,7 @@ class FormControllerTest {
 
     @Test
     void test_image_ok() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get(URI.create("/image?name=name&yearMonth=2020-11&h8=1&fs=2&bs=3&lo=4")))
+        MvcResult mvcResult = mockMvc.perform(get(URI.create("/image?name=name&yearMonth=2020-11&hours=1&fs=2&bs=3&lo=4")))
                 .andExpect(status().isOk()).andReturn();
         byte[] content = mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.IMAGE_JPEG)).andReturn()
