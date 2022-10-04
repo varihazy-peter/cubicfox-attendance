@@ -4,8 +4,6 @@ import com.cubicfox.attendance.WorkCalendar;
 import com.cubicfox.attendance.domain.DayDescription;
 import com.cubicfox.attendance.domain.DayModifier;
 import java.time.YearMonth;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -49,7 +47,7 @@ public class FormRequest {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    Map<DayDescription, ? extends Collection<Integer>> placeHolders() {
+    Map<DayDescription, List<Integer>> placeHolders() {
         return Map.of( //
                 DayModifier.FS, fs == null ? List.of() : fs, //
                 workCalendar == null ? DayDescription.H8 : workCalendar.getDayDescription(),
@@ -58,36 +56,4 @@ public class FormRequest {
                 DayModifier.LO, lo == null ? List.of() : lo //
         );
     }
-
-    Map<String, String> params() {
-        Map<String, String> map = new HashMap<String, String>();
-        addIf(map, "name", name);
-        addIf(map, "yearMonth", yearMonth);
-        addIf(map, "hours", hours);
-        addIf(map, "fs", fs);
-        addIf(map, "bs", bs);
-        addIf(map, "lo", lo);
-        addIf(map, "workCalendar", workCalendar);
-
-        return map;
-    }
-
-    private void addIf(Map<String, String> map, String key, Object object) {
-        if (object == null) {
-            return;
-        }
-        if (object instanceof Collection<?>) {
-            Collection<?> c = (Collection<?>) object;
-            if (!c.isEmpty()) {
-                map.put(key, convert(c));
-            }
-        } else {
-            map.put(key, String.valueOf(object));
-        }
-    }
-
-    private String convert(Collection<?> c) {
-        return c.stream().filter(Objects::nonNull).map(String::valueOf).collect(Collectors.joining(","));
-    }
-
 }

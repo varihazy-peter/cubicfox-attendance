@@ -3,8 +3,6 @@ package com.cubicfox.attendance.api;
 import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-import java.io.IOException;
-import java.nio.channels.Channels;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.AccessLevel;
@@ -26,10 +24,9 @@ public class ImageController {
     FormRequestAdapter formRequestAdapter;
 
     @GetMapping(value = "/rest/image", produces = MediaType.IMAGE_JPEG_VALUE)
-    ResponseEntity<StreamingResponseBody> image(@Valid FormRequest request) throws IOException {
+    ResponseEntity<StreamingResponseBody> image(@Valid FormRequest request) {
         List<Placement> placements = attendanceProfile.createPlacements(formRequestAdapter.map(request));
-        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE,
-                Channels.newChannel(os));
+        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
     }
 }

@@ -4,8 +4,7 @@ A simple attendance image creator based on `Benszerva`.
 
 # requirements
 
-1. jdk 17 (used: `openjdk version "17.0.1" 2021-10-19`); 
-The source code is compatible with 8 `-Djava.version=8`
+1. jdk 17 (used: `openjdk version "17.0.1" 2021-10-19`)
 
 2. maven (used:`Apache Maven 3.8.4`)
 

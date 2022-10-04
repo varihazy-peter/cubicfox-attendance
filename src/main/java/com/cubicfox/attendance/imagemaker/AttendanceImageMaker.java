@@ -10,9 +10,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UncheckedIOException;
-import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -35,10 +34,10 @@ public class AttendanceImageMaker {
         }
     }
 
-    public long write(List<Placement> placements, String MIMEType, WritableByteChannel os) {
+    public long write(List<Placement> placements, String mimeType, OutputStream os) {
         WritableRenderedImage res = image(placements);
-        try (CountingOutputStream cos = new CountingOutputStream(Channels.newOutputStream(os))) {
-            ImageWriter imageWriter = Iterators.get(ImageIO.getImageWritersByMIMEType(MIMEType), 0);
+        try (CountingOutputStream cos = new CountingOutputStream(os)) {
+            ImageWriter imageWriter = Iterators.get(ImageIO.getImageWritersByMIMEType(mimeType), 0);
             imageWriter.setOutput(ImageIO.createImageOutputStream(cos));
             imageWriter.write(res);
             return cos.getCount();

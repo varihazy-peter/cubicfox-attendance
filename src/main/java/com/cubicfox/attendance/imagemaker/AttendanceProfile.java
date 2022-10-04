@@ -29,7 +29,8 @@ public class AttendanceProfile {
     public static class Placement {
         @NonNull
         String text;
-        int x, y;
+        int x;
+        int y;
         @NonNull
         java.awt.Font font;
 
@@ -62,17 +63,14 @@ public class AttendanceProfile {
         int day = date.getDayOfMonth();
         return Stream.of( //
                 placeText(date.getDayOfWeek().name(), day, Offset.DOW, fontStorege.getFontDOW()), //
-                placeText(dayDescription.getText(), day, Offset.TimeH, fontStorege.getFontH()), //
+                placeText(dayDescription.getText(), day, Offset.HOURS, fontStorege.getFontH()), //
                 placeText(dayDescription.getStart(), day, Offset.START, fontStorege.getFontT()), //
                 placeText(dayDescription.getEnd(), day, Offset.END, fontStorege.getFontT()) //
         ).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     private Placement placeText(String text, int day, Offset offset, Font font) {
-        if (text == null) {
-            return null;
-        }
-        if (text.length() == 0) {
+        if (text == null || text.length() == 0) {
             return null;
         }
         Point point = calculateCord(day, offset, text);
@@ -98,10 +96,12 @@ public class AttendanceProfile {
 
     @RequiredArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-    private static enum Offset {
-        START(0, 0), END(0, 67), TimeH(440, 67, 50), DOW(-386, 67);
+    private enum Offset {
+        START(0, 0), END(0, 67), HOURS(440, 67, 50), DOW(-386, 67);
 
-        int x, y, xOffset;
+        int x;
+        int y;
+        int xOffset;
 
         private Offset(int x, int y) {
             this(x, y, 0);
@@ -114,7 +114,8 @@ public class AttendanceProfile {
 
     @Value
     private static class Point {
-        int x, y;
+        int x;
+        int y;
     }
 
 }

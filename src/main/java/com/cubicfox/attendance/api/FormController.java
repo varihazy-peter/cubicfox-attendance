@@ -4,9 +4,7 @@ import com.cubicfox.attendance.WorkCalendar;
 import com.cubicfox.attendance.imagemaker.AttendanceImageMaker;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile;
 import com.cubicfox.attendance.imagemaker.AttendanceProfile.Placement;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.channels.Channels;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +13,7 @@ import java.util.stream.Stream;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +25,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -41,46 +42,48 @@ public class FormController {
     FormRequestAdapter formRequestAdapter;
 
     @GetMapping
-    ModelAndView form(@Valid FormRequest formRequest, BindingResult bindingResult, Model model) throws IOException {
+    ModelAndView form(@Valid FormRequest formRequest, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(e -> log.warn("{}", e));
             model.addAttribute("errors", bindingResult.getAllErrors().stream().map(ObjectError::toString)
                     .collect(Collectors.toUnmodifiableList()));
         }
         Map<String, Object> modelMap = model.asMap();
-        modelMap.put(
-                "workCalendar", Stream
-                        .concat(Stream
-                                .of(Map.of("name", "NONE", "value", "", "selected",
-                                        formRequest.getWorkCalendar() == null ? "selected" : "")),
-                                Arrays.stream(WorkCalendar.values()).map(wc -> Map.of("name", wc.name(), "value",
-                                        wc.name(), "selected", formRequest.getWorkCalendar() == wc ? "selected" : "")))
-                        .toList());
+        modelMap.put("workCalendar", Stream.concat( //
+                Stream.of(new SelectOption("NONE", "", formRequest.getWorkCalendar() == null)),
+                Arrays.stream(WorkCalendar.values()) //
+                        .map(wc -> new SelectOption(wc.name(), wc.name(), formRequest.getWorkCalendar() == wc)))
+                .toList());
         return new ModelAndView("form", modelMap);
     }
 
+    @Value
+    private static class SelectOption {
+        String name;
+        String value;
+        boolean isSelected;
+
+        @SuppressWarnings("unused")
+        public String selected() {
+            return isSelected ? "selected" : "";
+        }
+    }
+
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
-    ResponseEntity<StreamingResponseBody> image(@Valid FormRequest request, BindingResult bindingResult, Model model)
-            throws IOException {
+    ResponseEntity<StreamingResponseBody> image(@Valid FormRequest request, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            String uri = uri(request.params());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(uri));
-            return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).headers(headers).build();
+            return redirect();
         }
         List<Placement> placements = attendanceProfile.createPlacements(formRequestAdapter.map(request));
-        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE,
-                Channels.newChannel(os));
+        StreamingResponseBody rb = os -> imageMaker.write(placements, MediaType.IMAGE_JPEG_VALUE, os);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(rb);
     }
 
-    String uri(Map<String, String> params) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/");
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            String key = entry.getKey();
-            String val = entry.getValue();
-            builder = builder.queryParam(key, val);
-        }
-        return builder.toUriString();
+    private ResponseEntity<StreamingResponseBody> redirect() {
+        String queryString = (((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest())
+                .getQueryString();
+        URI uri = UriComponentsBuilder.fromPath("/").query(queryString).build().toUri();
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).header(HttpHeaders.LOCATION, uri.toString())
+                .build();
     }
 }
