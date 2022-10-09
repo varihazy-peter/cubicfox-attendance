@@ -46,16 +46,12 @@ public class AttendanceProfile {
         return Stream.concat(head, days).collect(Collectors.toUnmodifiableList());
     }
 
-    private final Point pointName = new Point(480, 680);
-    private final Point pointYear = new Point(1250, 680);
-    private final Point pointMonth = new Point(1510, 680);
-
     private List<Placement> placeHead(String name, YearMonth ym) {
         String month = ym.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, new Locale("hu", "HU"));
         return List.of( //
-                placeText(name, pointName, fontStorege.getFontN()), //
-                placeText(Integer.toString(ym.getYear()), pointYear, fontStorege.getFontN()), //
-                placeText(month, pointMonth, fontStorege.getFontN()) //
+                placeText(name, 480, 680, fontStorege.getFontN()), //
+                placeText(Integer.toString(ym.getYear()), 1250, 680, fontStorege.getFontN()), //
+                placeText(month, 1510, 680, fontStorege.getFontN()) //
         );
     }
 
@@ -73,25 +69,16 @@ public class AttendanceProfile {
         if (text == null || text.length() == 0) {
             return null;
         }
-        Point point = calculateCord(day, offset, text);
-        return placeText(text, point.x, point.y, font);
-    }
-
-    private Placement placeText(String object, Point point, Font font) {
-        return placeText(object, point.x, point.y, font);
+        if (day < 0 || day > 31) {
+            throw new IllegalArgumentException("day must be between 1 and 31");
+        }
+        int baseY = ((day < 16) ? day - 1 : day - 16 ) * 135 + 890;
+        int baseX = (day < 16) ? 610 : 1632;
+        return placeText(text, baseX + offset.xFor(text.length()), baseY + offset.y, font);
     }
 
     private Placement placeText(String object, int x, int y, Font font) {
         return new Placement(object, x, y, font);
-    }
-
-    private Point calculateCord(int day, Offset offset, String text) {
-        if (day < 0 || day > 31) {
-            throw new IllegalArgumentException("day must be between 1 and 31");
-        }
-        int dayYPos = (day < 16) ? day - 1 : day - 16;
-        int dayXCord = (day < 16) ? 610 : 1632;
-        return new Point(dayXCord + offset.xFor(text.length()), dayYPos * 135 + 890 + offset.y);
     }
 
     @RequiredArgsConstructor
@@ -111,11 +98,4 @@ public class AttendanceProfile {
             return n > 1 ? x - (n - 1) * xOffset : x;
         }
     }
-
-    @Value
-    private static class Point {
-        int x;
-        int y;
-    }
-
 }
